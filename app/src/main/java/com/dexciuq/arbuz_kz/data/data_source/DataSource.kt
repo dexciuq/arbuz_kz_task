@@ -1,9 +1,9 @@
-package com.dexciuq.arbuz_kz.domain.repository
+package com.dexciuq.arbuz_kz.data.data_source
 
 import com.dexciuq.arbuz_kz.domain.model.Product
 import kotlinx.coroutines.flow.Flow
 
-interface ProductRepository {
+interface DataSource {
     fun getAllProducts(): Flow<List<Product>>
     fun getAllProductsFromCart(): Flow<List<Product>>
     suspend fun insertProductToCart(product: Product)
