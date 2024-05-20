@@ -10,7 +10,7 @@ data class Product(
     val image: Int,
     val price: Long,
     val productUnit: ProductUnit,
-    val quantity: Int,
+    var quantity: Int = 0,
 ) {
     fun getPrice(): String = "${this.price / 100} ${this.productUnit.name.lowercase()} / ₸"
 }
