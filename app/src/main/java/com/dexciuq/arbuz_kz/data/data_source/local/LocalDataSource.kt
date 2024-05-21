@@ -15,15 +15,20 @@ class LocalDataSource @Inject constructor(
     private val productDao: ProductDao,
 ) : DataSource {
 
+    private val productList: List<Product> = getProductList()
+
     override fun getAllProducts(): Flow<List<Product>> = flow {
-        val products = getProductList()
         productDao.getAll().collect { cardProducts ->
-            cardProducts.toDomain().forEach { cardProduct ->
-                products.find {
-                    it.id == cardProduct.id
-                }?.quantity = cardProduct.quantity
+            val updatedProductList = productList.map { product ->
+                val matchingCardProduct = cardProducts.find { it.id == product.id }
+                if (matchingCardProduct != null) {
+                    product.quantity = matchingCardProduct.quantity
+                } else {
+                    product.quantity = 0
+                }
+                product
             }
-            emit(products)
+            emit(updatedProductList)
         }
     }
 
@@ -188,7 +193,7 @@ class LocalDataSource @Inject constructor(
             description = "Table salt",
             image = R.drawable.ic_salt,
             price = 10000,
-            productUnit = ProductUnit.KG
+            productUnit = ProductUnit.KG,
         ),
         Product(
             id = 19,
