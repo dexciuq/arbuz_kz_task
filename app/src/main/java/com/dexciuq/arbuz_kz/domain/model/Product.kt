@@ -12,5 +12,5 @@ data class Product(
     val productUnit: ProductUnit,
     var quantity: Int = 0,
 ) {
-    fun getPrice(): String = "${this.price / 100} ${this.productUnit.name.lowercase()} / ₸"
+    fun getPrice(): String = "${this.price / 100} ₸ / ${this.productUnit.name.lowercase()}"
 }

@@ -10,4 +10,21 @@
         <item name="android:navigationBarColor">@color/background</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
     </style>
+
+    <style name="BottomNavigationView.Inactive" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textFontWeight" tools:ignore="NewApi">600</item>
+    </style>
+
+    <style name="ToolbarTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textFontWeight" tools:targetApi="p">700</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/title</item>
+        <item name="fontFamily">@font/manrope_font_family</item>
+    </style>
+
 </resources>
