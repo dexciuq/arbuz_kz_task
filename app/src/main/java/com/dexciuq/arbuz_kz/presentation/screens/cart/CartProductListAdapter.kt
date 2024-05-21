@@ -32,15 +32,11 @@ class CartProductListAdapter(
                 image.setImageResource(product.image)
 
                 plus.setOnClickListener {
-                    product.quantity++
-                    onUpdateQuantityClick(product)
-                    quantity.text = product.quantity.toString()
+                    onUpdateQuantityClick(product.copy(quantity = product.quantity + 1))
                 }
 
                 minus.setOnClickListener {
-                    product.quantity--
-                    onUpdateQuantityClick(product)
-                    quantity.text = product.quantity.toString()
+                    onUpdateQuantityClick(product.copy(quantity = product.quantity - 1))
                 }
             }
         }

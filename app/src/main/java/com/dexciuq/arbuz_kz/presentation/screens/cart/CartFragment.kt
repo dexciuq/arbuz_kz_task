@@ -54,8 +54,7 @@ class CartFragment : Fragment() {
         val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val product = adapter.currentList[viewHolder.adapterPosition]
-                product.quantity = 0
-                viewModel.updateProduct(product)
+                viewModel.updateProduct(product.copy(quantity = 0))
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
