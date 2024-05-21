@@ -8,8 +8,6 @@ import com.dexciuq.arbuz_kz.data.mapper.toProductEntity
 import com.dexciuq.arbuz_kz.domain.model.Product
 import com.dexciuq.arbuz_kz.domain.model.ProductUnit
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -17,20 +15,25 @@ class LocalDataSource @Inject constructor(
     private val productDao: ProductDao,
 ) : DataSource {
 
-    override fun getAllProducts(): Flow<List<Product>> = channelFlow {
-        val products = getProductList()
-        productDao.getAll().collectLatest { cardProducts ->
-            cardProducts.toDomain().forEach { cardProduct ->
-                products.find {
-                    it.id == cardProduct.id
-                }?.quantity = cardProduct.quantity
+    private val productList: List<Product> = getProductList()
+
+    override fun getAllProducts(): Flow<List<Product>> = flow {
+        productDao.getAll().collect { cardProducts ->
+            val updatedProductList = productList.map { product ->
+                val matchingCardProduct = cardProducts.find { it.id == product.id }
+                if (matchingCardProduct != null) {
+                    product.quantity = matchingCardProduct.quantity
+                } else {
+                    product.quantity = 0
+                }
+                product
             }
-            send(products)
+            emit(updatedProductList)
         }
     }
 
     override fun getAllProductsFromCart(): Flow<List<Product>> = flow {
-        productDao.getAll().collectLatest {
+        productDao.getAll().collect {
             emit(it.toDomain())
         }
     }
@@ -190,7 +193,7 @@ class LocalDataSource @Inject constructor(
             description = "Table salt",
             image = R.drawable.ic_salt,
             price = 10000,
-            productUnit = ProductUnit.KG
+            productUnit = ProductUnit.KG,
         ),
         Product(
             id = 19,
