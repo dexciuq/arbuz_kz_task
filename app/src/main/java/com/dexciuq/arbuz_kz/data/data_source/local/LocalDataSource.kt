@@ -8,6 +8,7 @@ import com.dexciuq.arbuz_kz.data.mapper.toProductEntity
 import com.dexciuq.arbuz_kz.domain.model.Product
 import com.dexciuq.arbuz_kz.domain.model.ProductUnit
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -16,7 +17,7 @@ class LocalDataSource @Inject constructor(
     private val productDao: ProductDao,
 ) : DataSource {
 
-    override fun getAllProducts(): Flow<List<Product>> = flow {
+    override fun getAllProducts(): Flow<List<Product>> = channelFlow {
         val products = getProductList()
         productDao.getAll().collectLatest { cardProducts ->
             cardProducts.toDomain().forEach { cardProduct ->
@@ -24,7 +25,7 @@ class LocalDataSource @Inject constructor(
                     it.id == cardProduct.id
                 }?.quantity = cardProduct.quantity
             }
-            emit(products)
+            send(products)
         }
     }
 
