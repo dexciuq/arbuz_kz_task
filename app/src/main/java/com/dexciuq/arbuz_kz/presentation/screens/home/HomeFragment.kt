@@ -17,7 +17,7 @@ class HomeFragment : Fragment() {
 
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
     private val viewModel: HomeViewModel by viewModels()
-    private lateinit var productListAdapter: HomeProductListAdapter
+    private lateinit var adapter: HomeProductListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,14 +33,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupProductListSection() {
-        productListAdapter = HomeProductListAdapter(viewModel::updateProduct)
-        binding.productListRv.adapter = productListAdapter
+        adapter = HomeProductListAdapter(viewModel::updateProduct)
+        binding.productList.adapter = adapter
     }
 
     private fun collectData() {
         lifecycleScope.launch {
             viewModel.products.collectLatest { products ->
-                productListAdapter.submitList(products)
+                adapter.submitList(products)
             }
         }
     }

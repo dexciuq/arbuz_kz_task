@@ -1,20 +1,18 @@
-package com.dexciuq.arbuz_kz.presentation.screens.home
+package com.dexciuq.arbuz_kz.presentation.screens.cart
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dexciuq.arbuz_kz.databinding.ItemProductBinding
+import com.dexciuq.arbuz_kz.databinding.ItemCartProductBinding
 import com.dexciuq.arbuz_kz.domain.model.Product
-import com.dexciuq.arbuz_kz.utils.hide
-import com.dexciuq.arbuz_kz.utils.show
 
-class HomeProductListAdapter(
+class CartProductListAdapter(
     private val onUpdateQuantityClick: (Product) -> Unit,
-) : ListAdapter<Product, HomeProductListAdapter.ViewHolder>(HomeProductDiffUtil()) {
+) : ListAdapter<Product, CartProductListAdapter.ViewHolder>(CartProductDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ItemProductBinding.inflate(
+        ItemCartProductBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
     )
@@ -23,7 +21,7 @@ class HomeProductListAdapter(
         holder.bind(getItem(position))
 
     inner class ViewHolder(
-        private val binding: ItemProductBinding
+        private val binding: ItemCartProductBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) {
@@ -32,20 +30,6 @@ class HomeProductListAdapter(
                 price.text = product.getPrice()
                 quantity.text = product.quantity.toString()
                 image.setImageResource(product.image)
-
-                if (product.quantity == 0) {
-                    addToCardContainer.show()
-                    quantityContainer.hide()
-                } else {
-                    addToCardContainer.hide()
-                    quantityContainer.show()
-                }
-
-                addToCardContainer.setOnClickListener {
-                    addToCardContainer.hide()
-                    quantityContainer.show()
-                    plus.performClick()
-                }
 
                 plus.setOnClickListener {
                     product.quantity++
@@ -57,10 +41,6 @@ class HomeProductListAdapter(
                     product.quantity--
                     onUpdateQuantityClick(product)
                     quantity.text = product.quantity.toString()
-                    if (product.quantity == 0) {
-                        addToCardContainer.show()
-                        quantityContainer.hide()
-                    }
                 }
             }
         }
