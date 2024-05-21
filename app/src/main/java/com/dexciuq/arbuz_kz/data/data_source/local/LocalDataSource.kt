@@ -21,12 +21,7 @@ class LocalDataSource @Inject constructor(
         productDao.getAll().collect { cardProducts ->
             val updatedProductList = productList.map { product ->
                 val matchingCardProduct = cardProducts.find { it.id == product.id }
-                if (matchingCardProduct != null) {
-                    product.quantity = matchingCardProduct.quantity
-                } else {
-                    product.quantity = 0
-                }
-                product
+                product.copy(quantity = matchingCardProduct?.quantity ?: 0)
             }
             emit(updatedProductList)
         }
